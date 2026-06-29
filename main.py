@@ -2,32 +2,42 @@
 from google import genai
 from dotenv import load_dotenv
 from pathlib import Path
-
-def create_directory(name_of_directory:str) -> str:
-    """Funkcja tworzy katalog o podanej nazwie name_of_directory"""
-    print("Teraz tworzę Twój katalog")
-    name_of_directory = name_of_directory.replace(" ", "_")
-    Path(name_of_directory).mkdir(exist_ok = True)
-    return f"Katalog {name_of_directory} został utworzony"
-
+from utils.dirtools import *
 
 # This example demonstrates how to use the Gemini 2.0 Pro model to generate content based on a user query.
 def main():
     load_dotenv()
-    tools = [create_directory]  # Create a list of tools (functions) that the model can use to generate responses.
+    tools = [create_directory,
+             remove_directory,
+             list_content_of_directory,]  # Create a list of tools (functions) that the model can use to generate responses.
     client = genai.Client()
+    try:
 
-    chat = client.chats.create (
-        model="gemma-4-31b-it",  # You can specify the model you want to use here,
-        config={
-            "tools": tools,  # Pass the tools function to provide the list of countries as a tool for the model to use in generating the response.
-        }
+        chat = client.chats.create (
+            model="gemma-4-31b-it",  # You can specify the model you want to use here,
+            config={
+                "tools": tools,  # Pass the tools function to provide the list of countries as a tool for the model to use in generating the response.
+            }
     )
+    except:
+        print("Nastąpił błąd!")
     while True:
-        name_of_directory = """Zastąp spacje w nazwach podkreśleniami"""
-        name_of_directory = input(f"Podaj nazwę katalogu do utworzenia: ")
-        response = chat.send_message(f"Stwórz, proszę, katalog o nazwie {name_of_directory}")
-        print(response.text)
+        action_to_perform =( 
+        "Jesteś Agentem Zarządzania Plikami. Twoim zadaniem jest pomaganie użytkownikowi "
+        "w organizacji jego katalogów."
+        "Używaj odpowiedniego narzędzia w zależności od tego, o jaką operację plikową poprosi Cię użytkownik."
+        "Jeżeli pierwszym znakiem w  nazwie katalogu lub pliku jest kropka, zignoruj tę nazwę i jedynie wyświetl informację o jej istnieniu."
+        "Po użyciu narzędzia, poinformuj "
+        "użytkownika o statusie operacji."
+    )
+        action_to_perform = input(f"Co mam zrobić? ")
+        try:
+            response = chat.send_message(f"{action_to_perform}.")
+        except:
+            print( "Nastąpił jakiś błąd przy przetwarzaniu akcji")
+
+        else:
+            print(response.text)
         finish = input(f"Czy kończymy?")
         if finish == "tak":
             break
