@@ -4,17 +4,17 @@ Hello, Create, please for me a directory structure containing names of noblists 
 
 resulted with a following directory structure:
 
-Nobelists_Astronomy
-    ├── Andrea_Ghez
-    │   └── 2020
-    ├── Arno_Penzias
-    │   └── 1978
-    ├── Reinhard_Genzel
-    │   └── 2020
-    ├── Robert_Wilson
-    │   └── 1978
-    ├── Roger_Penrose
-    │   └── 2020
-    └── Subrahmanyan_Chandrasekhar
-        └── 1983
+Nobelists_Astronomy  
+    ├── Andrea_Ghez  
+    │   └── 2020  
+    ├── Arno_Penzias  
+    │   └── 1978  
+    ├── Reinhard_Genzel  
+    │   └── 2020  
+    ├── Robert_Wilson  
+    │   └── 1978  
+    ├── Roger_Penrose  
+    │   └── 2020  
+    └── Subrahmanyan_Chandrasekhar  
+        └── 1983  
 
