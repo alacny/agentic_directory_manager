@@ -18,3 +18,5 @@ Nobelists_Astronomy
     └── Subrahmanyan_Chandrasekhar  
         └── 1983  
 
+The agent can also propose a directory structure depending on the content of files which exist in a givien location (it has not yet ability to operate on files but at least it can look into the not to long text files).
+
