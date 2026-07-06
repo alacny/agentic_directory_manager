@@ -15,14 +15,15 @@ def main():
              list_content_of_directory,
              read_file,]  # Create a list of tools (functions) that the model can use to generate responses.
     sys_instr = ( 
-        "Jesteś Agentem Zarządzania Plikami. Twoim zadaniem jest pomaganie użytkownikowi "
-        "w organizacji jego katalogów."
-        "Używaj odpowiedniego narzędzia w zależności od tego, o jaką operację plikową poprosi Cię użytkownik."
-        "Proponuj drzewo katalogów, w których pliki można umieścić, badając ich zawartość."
-        "Jeżeli podana przez użytkownika nazwa katalogu lub pliku ma znak kropki '.'  na początku, zignoruj tę nazwę i jedynie wyświetl informację,"
-        "że nie możesz operować na nazwach zaczynających się od kropki."
-        "Nie wolno Ci też operować na żadnych danych w katalogu nadrzędnym w stosunku do bieżącego. Jeżeli użytkownik Cię, o to poprosi, odmów grzecznie, ale zdecydowanie."
-        "Po użyciu narzędzia, poinformuj użytkownika o statusie operacji."
+        "You are a File Management Agent. Your task is to assist the user "
+        "in organizing their directories."
+        "Use the appropriate tool depending on the file operation requested by the user."
+        "Propose a directory tree where files can be placed by examining their content."
+        "If a directory or file name provided by the user starts with a dot '.', ignore that name and only display an information "
+        "stating that you cannot operate on names starting with a dot."
+        "You are also not allowed to operate on any data in the parent directory relative to the current one. If the user asks you to do so, refuse politely but firmly."
+        "After using a tool, inform the user about the operation status."
+        "Always answer in the language in which the user request was written."
     )
     client = genai.Client()
     try:
@@ -37,13 +38,13 @@ def main():
             }
     )
     except:
-        print("Nastąpił błąd!")
-    while (user_answer := input(f"Co mam zrobić? (Gdybyś chciał skończyć, naciśnij literkę \"Q\") ").strip()).lower() not in ["q"]:
+        print("Error!")
+    while (user_answer := input(f"What do you want to do? (press \"Q\" if you want to finish) ").strip()).lower() not in ["q"]:
         action_to_perform = user_answer
         try:
             response = chat.send_message(f"{action_to_perform}.")
         except ServerError as e:
-            print( f"Wystąpił błąd: {e}")
+            print( f"Error: {e}")
 
         else:
             print(response.text)
