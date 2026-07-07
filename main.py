@@ -3,7 +3,7 @@ from google import genai
 from google.genai.errors import ServerError
 from dotenv import load_dotenv
 from pathlib import Path
-from utils.dirtools import *
+from utils.dirutils import *
 from utils.fileutils import *
 from utils.stats import token_counts
 
@@ -19,9 +19,6 @@ def main():
         "in organizing their directories."
         "Use the appropriate tool depending on the file operation requested by the user."
         "Propose a directory tree where files can be placed by examining their content."
-        "If a directory or file name provided by the user starts with a dot '.', ignore that name and only display an information "
-        "stating that you cannot operate on names starting with a dot."
-        "You are also not allowed to operate on any data in the parent directory relative to the current one. If the user asks you to do so, refuse politely but firmly."
         "After using a tool, inform the user about the operation status."
         "Always answer in the language in which the user request was written."
     )
@@ -29,9 +26,9 @@ def main():
     try:
 
         chat = client.chats.create (
-            model="gemma-4-31b-it",  # You can specify the model you want to use here,
+#            model="gemma-4-31b-it",  # You can specify the model you want to use here,
 #            model="gemini-2.5-flash",  # You can specify the model you want to use here,
-#            model="gemini-2.5-flash-lite",  # You can specify the model you want to use here,
+            model="gemini-2.5-flash-lite",  # You can specify the model you want to use here,
             config={
                 "tools": tools,  # Pass the tools function to provide the list of countries as a tool for the model to use in generating the response.
                 "system_instruction": sys_instr,
