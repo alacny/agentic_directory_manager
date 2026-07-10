@@ -26,9 +26,9 @@ def main():
     try:
 
         chat = client.chats.create (
-#            model="gemma-4-31b-it",  # You can specify the model you want to use here,
+            model="gemma-4-31b-it",  # You can specify the model you want to use here,
 #            model="gemini-2.5-flash",  # You can specify the model you want to use here,
-            model="gemini-2.5-flash-lite",  # You can specify the model you want to use here,
+#            model="gemini-2.5-flash-lite",  # You can specify the model you want to use here,
             config={
                 "tools": tools,  # Pass the tools function to provide the list of countries as a tool for the model to use in generating the response.
                 "system_instruction": sys_instr,
