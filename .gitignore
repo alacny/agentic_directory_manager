@@ -1,0 +1,6 @@
+# Ignore all files whose names start with dot
+
+.env
+.env*.local
+__pycache__/
+*.pyc
