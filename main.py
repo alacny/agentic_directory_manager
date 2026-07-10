@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-#!/usr/bin/env python3
 from typing import Any, Callable, List
 from google import genai
 from google.genai import types
@@ -7,7 +6,7 @@ from google.genai.errors import APIError
 from dotenv import load_dotenv
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
-# Twoje prawdziwe importy - jawne i bezpieczne
+# True explicit and safe imports from your local utils module
 from utils.dirutils import create_directory, remove_directory, list_content_of_directory
 from utils.fileutils import read_file
 from utils.stats import token_counts
@@ -18,7 +17,7 @@ class FileAgent:
     Clean, tested structure adapted for synchronous utils functions.
     """
     def __init__(
-        self,
+        self, 
         model_name: str = "gemini-2.5-flash",
         tools: List[Callable[..., Any]] | None = None,
         system_instruction: str | None = None
@@ -28,7 +27,7 @@ class FileAgent:
         self.model_name: str = model_name
         self.tools: List[Callable[..., Any]] = tools or []
         self.system_instruction: str = system_instruction or "You are a helpful assistant."
-        self.chat: Any = None
+        self.chat: Any = None 
 
     def initialize_session(self) -> None:
         """Initializes the synchronous chat session with the model."""
@@ -37,7 +36,7 @@ class FileAgent:
             system_instruction=self.system_instruction,
             temperature=0.2,
         )
-        # Używamy standardowego, synchronicznego kreatora czatu
+        # Using the standard, synchronous chat creator
         self.chat = self.client.chats.create(
             model=self.model_name,
             config=config
@@ -53,18 +52,18 @@ class FileAgent:
         """Sends a message to the agent synchronously with retry mechanism."""
         if not self.chat:
             raise RuntimeError("Chat session is not initialized. Call initialize_session() first.")
-
+        
         try:
             response = self.chat.send_message(message)
-
-            # Opcjonalnie: Aktualizacja Twoich statystyk tokenów, jeśli obiekt to wspiera
+            
+            # Optional: Update your token statistics if the object supports it
             if response.usage_metadata and hasattr(token_counts, 'update'):
-                # Przykładowe użycie, dopasuj do faktycznej metody w utils.stats
+                # Example usage, adjust according to the actual method in utils.stats
                 token_counts.update(
-                    response.usage_metadata.prompt_token_count,
+                    response.usage_metadata.prompt_token_count, 
                     response.usage_metadata.candidates_token_count
                 )
-
+                
             return response.text
         except APIError as e:
             print(f"[API ERROR] Gemini communication failure: {e}")
@@ -73,35 +72,38 @@ class FileAgent:
 def run_cli_loop(agent: FileAgent) -> None:
     """Standard, synchronous CLI loop."""
     agent.initialize_session()
-    print("Agent is ready. Type 'Q' to exit.")
-
+    
     while True:
+        print("Agent is ready. Type 'Q' to exit.")
         user_answer = input("\nWhat do you want to do? ").strip()
         if user_answer.lower() == 'q':
             print("Exiting...")
             break
-
+            
         if not user_answer:
             continue
-
+            
         print("Agent is thinking...")
         response_text = agent.send_message(user_answer)
         print(f"Response: {response_text}")
 
 if __name__ == "__main__":
-    # Przekazujemy bezpośrednio Twoje synchroniczne funkcje z utils
+    # Passing your synchronous functions from utils directly
     tools_list = [create_directory, remove_directory, list_content_of_directory, read_file]
-
+    
     sys_prompt = (
         "You are a File Management Agent. Your task is to assist the user in organizing their directories. "
         "Use the appropriate tool depending on the file operation requested. Always answer in the user's language."
     )
-
-    # Tworzymy i odpalamy agenta
+    
+    # Instantiate and run the agent
     file_agent = FileAgent(
-        model_name="gemini-2.5-flash",
+#        model_name="gemini-2.5-flash",
+        model_name="gemini-2.5-flash-lite",
+#        model_name="gemini-2.0-flash",
+#        model_name="gemini-2.0-flash-lite",
         tools=tools_list,
         system_instruction=sys_prompt
     )
-
+    
     run_cli_loop(file_agent)
